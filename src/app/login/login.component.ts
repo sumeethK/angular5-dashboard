@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import { routerTransition } from '../router.animations';
+import {routerTransition} from '../router.animations';
 import {LoginService} from "../service/login.service";
 import {AlertService} from "../service/alert.service";
-import {FormModule} from "../layout/form/form.module";
 
 @Component({
     selector: 'app-login',
@@ -17,13 +16,21 @@ export class LoginComponent implements OnInit {
     loading = false;
     returnUrl: string;
 
+    message: string;
+
+
 
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: LoginService,
-        private alertService: AlertService) { }
+        private alertService: AlertService) {
+
+        // this.alertService.getMessage().subscribe((alert) => {
+        //     this.message =alert.text;
+        // });
+    }
 
 
     onLoggedin() {
@@ -47,7 +54,8 @@ export class LoginComponent implements OnInit {
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
-                    this.alertService.error(error);
+                    this.alertService.error(error.error.message);
+                    this.message = error.error.message;
                     this.loading = false;
                 });
     }
